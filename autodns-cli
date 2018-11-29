@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+#set -x
+#set -euxo pipefail
+
+declare -r prog=$(basename "$0")
+declare -r endpoint=https://api.autodns.com/v1
+declare -r ttl=120
+
+if [ -f './.autodns-cli.rc' ]; then
+    source ./.autodns-cli.rc
+fi
+
+source ./func.sh
+source ./commands.sh
+
+subcommand=$1
+case $subcommand in
+    "" | "-h" | "--help")
+        sub_help
+        ;;
+    *)
+        shift
+        declare -r command="sub_${subcommand}" 
+        $command "$@"
+        if [ $? = 127 ]; then
+            echo "Error: '$subcommand' is not a known subcommand." >&2
+            echo "       Run '${prog} --help' for a list of known subcommands." >&2
+            exit 1
+        fi
+        ;;
+esac
