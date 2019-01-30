@@ -8,6 +8,7 @@ declare -r endpoint=https://api.autodns.com/v1
 declare -r ttl=120
 
 if [ -f './.autodns-cli.rc' ]; then
+    # shellcheck disable=SC1091
     source ./.autodns-cli.rc
 fi
 
