@@ -195,9 +195,15 @@ function _get_origin(){
 
 #set -x
 
+# @private
+# @uses $MY_ZONE
+function _build_filter() {
+    local operator='EQUAL'
+    printf '{"filters": [{"key": "name", "operator": "%s", "value": "%s"}] }' "$operator" "$MY_ZONE"
+}
+
 # check if the zone exists
 # @TODO Write integration test
-# @TODO Create filter logic here, this assumes it's the first zone!
 # @private
 function _zone_exists() {
     local call=$(_build_call "POST")
@@ -208,9 +214,12 @@ function _zone_exists() {
     _log "_zone_exists"
     _log "zone_name: ${zone_name}"
 
-    # TODO: build filter or so with $zone
     local request="$call/zone/_search"
-    local zones=$(_make_request "$request")
+    local filter=$(_build_filter)
+
+    _log "Filter: $filter"
+
+    local zones=$(_make_request "$request" "$filter")
     if [ $? -ne 0 ]; then
         echo "$zones"
         return $?
