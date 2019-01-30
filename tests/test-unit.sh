@@ -2,9 +2,9 @@
 
 #set -euxo pipefail
 
-source ./.autodns-cli.rc
-source ./func.sh
-source ./assert.sh
+#source ./../.autodns-cli.rc
+source $(pwd)/func.sh
+source $(pwd)/tests/assert.sh
 
 prog=autodns-cli.test
 
