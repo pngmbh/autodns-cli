@@ -71,6 +71,8 @@ sub_show() {
 sub_update() {
     local domain=$1
     local ip=$2
+    local rrtype=$3
+
 
     if [ -z "$domain" ]; then
         echo "Please provide a domain."
@@ -80,6 +82,11 @@ sub_update() {
     if [ -z "$ip" ]; then
         echo "Please provide an IP."
         exit 1
+    fi
+
+    if [ -z "$rrtype" ]; then
+        echo "resource type not set, using A"
+        rrtype=A
     fi
 
     if [ -z ${MY_ZONE+x} ]; then
@@ -101,10 +108,10 @@ sub_update() {
 
     _log "Zone data: $data"
 
-    local a_record=$(_create_record "$domain" "$ip")
-    _log "New record: $a_record"
+    local new_record=$(_create_record "$domain" "$ip" )
+    _log "New record: $new_record"
 
-    local obj=$(_create_object "$a_record" "$ip" "$ttl")
+    local obj=$(_create_object "$new_record" "$ip" "$ttl" "$rrtype")
     _log "Created object: $obj"
 
     local payload=$(_update_zone "$data" "$obj")
