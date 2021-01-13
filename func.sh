@@ -1,8 +1,7 @@
 function _log() {
     local msg=$1
-    if [[ "DEBUGSYSLOG" = "true" ]] ;then logger -t "$prog" -i "${prog}: ${msg}";fi 
-    if [[ "DEBUGSTDERR" = "true" ]] ;then echo "$msg" >&2 ;fi 
-    echo "$msg" >&2
+    if [[ "$DEBUGSYSLOG" = "true" ]] ;then logger -t "$prog" -i "${prog}: ${msg}";fi 
+    if [[ "$DEBUGSTDERR" = "true" ]] ;then echo "$msg" >&2 ;fi 
 }
 
 # autodns calls
