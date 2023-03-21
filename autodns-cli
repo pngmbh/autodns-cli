@@ -7,13 +7,16 @@ declare -r prog=$(basename "$0")
 declare -r endpoint=https://api.autodns.com/v1
 declare -r ttl=120
 
-if [ -f './.autodns-cli.rc' ]; then
+if [ -f '~/.autodns-cli.rc' ]; then
     # shellcheck disable=SC1091
-    source ./.autodns-cli.rc
+    source ~/.autodns-cli.rc
 fi
 
-source ./func.sh
-source ./commands.sh
+#source ./func.sh
+#source ./commands.sh
+
+source $( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )/func.sh
+source $( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )/commands.sh
 
 subcommand=$1
 case $subcommand in

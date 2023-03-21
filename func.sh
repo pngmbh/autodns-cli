@@ -1,6 +1,7 @@
 function _log() {
     local msg=$1
-    logger -t "$prog" -i "${prog}: ${msg}"
+    if [[ "$DEBUGSYSLOG" = "true" ]] ;then logger -t "$prog" -i "${prog}: ${msg}";fi 
+    if [[ "$DEBUGSTDERR" = "true" ]] ;then echo "$msg" >&2 ;fi 
 }
 
 # autodns calls
@@ -169,8 +170,8 @@ function _create_object() {
     local record=$1
     local record_ip=$2
     local record_ttl=$3
-
-    printf '{ "name": "%s", "ttl": %d, "type": "A", "value": "%s" }' "$record" "$record_ttl" "$record_ip"
+    local rrtype=$4
+    printf '{ "name": "%s", "ttl": %d, "type": "'$rrtype'", "value": "%s" }' "$record" "$record_ttl" "$record_ip"
 }
 
 # Adds a record (JSON object) to a zone (JSON object)
